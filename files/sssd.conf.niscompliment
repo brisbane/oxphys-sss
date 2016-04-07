@@ -1,0 +1,48 @@
+# WARNING: THIS FILE IS MAINTAINED BY PUPPET!! DO NOT EDIT BY HAND
+# CONTACT itsupport@physics.ox.ac.uk IF YOU WOULD LIKE THIS CHANGED
+
+[sssd]
+config_file_version = 2
+domains = physics.ox.ac.uk
+services = nss, pam
+debug_level = 0
+[nss]
+
+[pam]
+offline_credentials_expiration = 7
+
+[domain/physics.ox.ac.uk]
+# Unless you know you need referrals, turn them off
+ldap_referrals = false
+dns_discovery_domain = physics.ox.ac.uk
+# Uncomment if you need offline login
+account_cache_expiration = 100
+entry_cache_timeout = 14400
+
+#offline_credentials_expiration = 100
+#case_sensitive = false
+#doesnt work^
+
+#best for servers
+cache_credentials = false
+
+id_provider = proxy
+auth_provider = krb5
+chpass_provider = krb5
+proxy_lib_name = nis
+enumerate = true
+
+# Uncomment if dns discovery of your AD servers isn't working.
+#krb5_server = server.ad.example.com
+krb5_realm = PHYSICS.OX.AC.UK
+#SCB###########################
+krb5_store_password_if_offline = true
+krb5_lifetime=10h
+krb5_renewable_lifetime = 30d
+krb5_renew_interval = 90
+##############################
+# Probably required with sssd 1.8.x and newer
+krb5_canonicalize = false
+#You wont get uniq files here, is that an issue.
+#cifs.upcall cant cope with any other template it seems
+krb5_ccname_template =  FILE:%d/krb5cc_%U
